@@ -29,6 +29,7 @@ jobs:
     env:
       APP_ENV: ${{ inputs.environment }}
       APP_MESSAGE: ${{ vars.APP_MESSAGE }}
+      TF_STATE_BUCKET: ${{ vars.TF_STATE_BUCKET }}
       TF_VAR_environment: ${{ inputs.environment }}
       # S3 bucket names are globally unique, so non-dev environments get a suffix (dev keeps its existing bucket).
       TF_VAR_artifact_bucket_name: ${{ inputs.environment == 'dev' && vars.ARTIFACT_BUCKET_NAME || format('{0}-{1}', vars.ARTIFACT_BUCKET_NAME, inputs.environment) }}
@@ -51,8 +52,9 @@ jobs:
       - name: Terraform init, validate, plan and apply
         working-directory: infra
         run: |
+          : "${TF_STATE_BUCKET:?Set the TF_STATE_BUCKET repository variable (Settings > Secrets and variables > Actions > Variables)}"
           terraform init -input=false \
-            -backend-config="bucket=${{ vars.TF_STATE_BUCKET }}" \
+            -backend-config="bucket=${TF_STATE_BUCKET}" \
             -backend-config="key=hello-world/${APP_ENV}/terraform.tfstate" \
             -backend-config="region=${AWS_REGION}" \
             -backend-config="use_lockfile=true"
