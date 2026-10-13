@@ -26,7 +26,7 @@ If an OIDC provider for GitHub already exists in the AWS account, import it or r
    Then create the environments `dev`, `staging` and `prod` (they are also created automatically on first run). Optionally enable **Required reviewers** on `prod` for a manual approval gate. Remove any duplicate secrets or variables from the `dev` environment itself.
 5. Push to `main` or run **Build and promote** manually. The pipeline runs lint, then builds once, then deploys the same artifact to `dev`, `staging` and `prod` in order. Each stage runs a smoke test; a failure rolls that environment back and stops promotion.
 6. To test rollback, run **Build and promote** manually and set `simulate_failure_in` to an environment. That environment's smoke test is forced to fail, so it rolls back to the previous release and later stages do not run. Deploy successfully at least once first, so there is a release to roll back to.
-7. Use the URLs printed by each deployment job. Instances are named `Emmanuel-Multiverse-Project5-<env>`.
+7. Use the URLs printed by each deployment job. Instances are named `venkat-Multiverse-Project5-<env>`.
 8. Run **Destroy infrastructure**, choosing an environment and entering `DESTROY`, when finished.
 
 ## Important

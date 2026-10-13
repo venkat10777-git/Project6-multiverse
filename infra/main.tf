@@ -154,7 +154,7 @@ resource "aws_instance" "web" {
   }
 
   tags = {
-    Name        = "Emmanuel-Multiverse-Project5-${var.environment}"
+    Name        = "venkat-Multiverse-Project5-${var.environment}"
     environment = var.environment
     ManagedBy   = "Terraform"
   }

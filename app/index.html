@@ -1,7 +1,33 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hello World</title>
-<style>body{font-family:Arial,sans-serif;display:grid;place-items:center;min-height:100vh;margin:0;background:#f5f7fa;color:#172b4d}.card{background:#fff;padding:3rem;border-radius:16px;box-shadow:0 8px 30px #091e4226;text-align:center}h1{color:#146eb4}</style></head>
-<body><main class="card"><h1>Hello World</h1><p>Deployed immutably with Terraform and GitHub Actions.</p><p>Simulating a rollback</p></p><p>Version: __VERSION__</p><p>Environment: <strong id="env">loading...</strong></p><p id="msg"></p></main>
-<script>fetch("/config.json").then(r=>r.json()).then(c=>{document.getElementById("env").textContent=c.environment;document.getElementById("msg").textContent=c.message}).catch(()=>{document.getElementById("env").textContent="unknown"})</script></body>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Task Tracker</title>
+<style>
+body{font-family:Arial,sans-serif;display:grid;place-items:center;min-height:100vh;margin:0;background:#f5f7fa;color:#172b4d}
+.card{background:#fff;padding:2rem;border-radius:16px;box-shadow:0 8px 30px #091e4226;width:min(92vw,420px)}
+h1{color:#146eb4;margin-top:0}
+form{display:flex;gap:.5rem}
+input{flex:1;padding:.6rem;border:1px solid #c1c7d0;border-radius:8px}
+button{padding:.6rem 1rem;border:0;border-radius:8px;background:#146eb4;color:#fff;cursor:pointer}
+ul{list-style:none;padding:0}
+li{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:1px solid #ebecf0;cursor:pointer}
+li.done span{text-decoration:line-through;color:#97a0af}
+li button{background:#de350b;padding:.2rem .6rem}
+small{color:#6b778c;display:block;text-align:center;margin-top:1rem}
+</style></head>
+<body><main class="card"><h1>Task Tracker</h1>
+<form id="f"><input id="t" placeholder="Add a task" required><button>Add</button></form>
+<ul id="list"></ul>
+<small>Version: __VERSION__ | Environment: <strong id="env">loading...</strong> <span id="msg"></span></small></main>
+<script>
+let tasks=[];try{tasks=JSON.parse(localStorage.getItem("tasks")||"[]")}catch(e){}
+const list=document.getElementById("list");
+function save(){try{localStorage.setItem("tasks",JSON.stringify(tasks))}catch(e){}}
+function render(){list.innerHTML="";tasks.forEach((t,i)=>{const li=document.createElement("li");li.className=t.done?"done":"";
+const s=document.createElement("span");s.textContent=t.text;li.onclick=()=>{t.done=!t.done;save();render()};
+const b=document.createElement("button");b.textContent="x";b.onclick=e=>{e.stopPropagation();tasks.splice(i,1);save();render()};
+li.append(s,b);list.append(li)})}
+document.getElementById("f").onsubmit=e=>{e.preventDefault();const i=document.getElementById("t");tasks.push({text:i.value,done:false});i.value="";save();render()};
+render();
+fetch("/config.json").then(r=>r.json()).then(c=>{document.getElementById("env").textContent=c.environment;document.getElementById("msg").textContent=c.message}).catch(()=>{document.getElementById("env").textContent="unknown"})
+</script></body>
 </html>
