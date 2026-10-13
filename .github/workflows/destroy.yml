@@ -24,6 +24,8 @@ jobs:
       group: hello-world-${{ inputs.environment }}
       cancel-in-progress: false
     env:
+      TF_STATE_BUCKET: ${{ vars.TF_STATE_BUCKET }}
+      ARTIFACT_BUCKET_NAME: ${{ vars.ARTIFACT_BUCKET_NAME }}
       TF_VAR_environment: ${{ inputs.environment }}
       TF_VAR_artifact_bucket_name: ${{ inputs.environment == 'dev' && vars.ARTIFACT_BUCKET_NAME || format('{0}-{1}', vars.ARTIFACT_BUCKET_NAME, inputs.environment) }}
     steps:
@@ -39,9 +41,11 @@ jobs:
           terraform_wrapper: false
       - working-directory: infra
         run: |
+          : "${TF_STATE_BUCKET:?Set the TF_STATE_BUCKET repository variable}"
+          : "${ARTIFACT_BUCKET_NAME:?Set the ARTIFACT_BUCKET_NAME repository variable}"
           terraform init -input=false \
-            -backend-config="bucket=${{ vars.TF_STATE_BUCKET }}" \
-            -backend-config="key=hello-world/${{ inputs.environment }}/terraform.tfstate" \
+            -backend-config="bucket=${TF_STATE_BUCKET}" \
+            -backend-config="key=hello-world/${TF_VAR_environment}/terraform.tfstate" \
             -backend-config="region=${AWS_REGION}" \
             -backend-config="use_lockfile=true"
           aws s3 rm "s3://${TF_VAR_artifact_bucket_name}" --recursive || true
