@@ -1,10 +1,11 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Task Tracker</title>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Venkats Task Tracker</title>
 <style>
 body{font-family:Arial,sans-serif;display:grid;place-items:center;min-height:100vh;margin:0;background:#f5f7fa;color:#172b4d}
 .card{background:#fff;padding:2rem;border-radius:16px;box-shadow:0 8px 30px #091e4226;width:min(92vw,420px)}
-h1{color:#146eb4;margin-top:0}
+h1{color:#146eb4;margin-top:0;margin-bottom:.25rem}
+.env{margin:0 0 1rem;font-size:1.1rem}.env strong{font-weight:700;text-transform:uppercase;color:#172b4d}
 form{display:flex;gap:.5rem}
 input{flex:1;padding:.6rem;border:1px solid #c1c7d0;border-radius:8px}
 button{padding:.6rem 1rem;border:0;border-radius:8px;background:#146eb4;color:#fff;cursor:pointer}
@@ -14,10 +15,11 @@ li.done span{text-decoration:line-through;color:#97a0af}
 li button{background:#de350b;padding:.2rem .6rem}
 small{color:#6b778c;display:block;text-align:center;margin-top:1rem}
 </style></head>
-<body><main class="card"><h1>Task Tracker</h1>
+<body><main class="card"><h1>Venkats Task Tracker</h1>
+<p class="env">Environment: <strong id="env">loading...</strong></p>
 <form id="f"><input id="t" placeholder="Add a task" required><button>Add</button></form>
 <ul id="list"></ul>
-<small>Version: __VERSION__ | Environment: <strong id="env">loading...</strong> <span id="msg"></span></small></main>
+<small>Version: __VERSION__ <span id="msg"></span></small></main>
 <script>
 let tasks=[];try{tasks=JSON.parse(localStorage.getItem("tasks")||"[]")}catch(e){}
 const list=document.getElementById("list");
