@@ -31,13 +31,13 @@ run_check() {
 }
 
 check_health() { curl -fsS "${SITE_URL}${HEALTH_PATH}" | grep -qx OK; }
-check_page() { curl -fsS "${SITE_URL}/" | grep -q "Hello World"; }
+check_page() { curl -fsS "${SITE_URL}/" | grep -q "Task Tracker"; }
 check_version() { curl -fsS "${SITE_URL}/" | grep -q "Version: ${EXPECTED_VERSION}"; }
 check_env() { [[ "$(curl -fsS "${SITE_URL}/config.json" | jq -r .environment)" == "${EXPECTED_ENV}" ]]; }
 
 echo "Smoke testing ${SITE_URL} (env=${EXPECTED_ENV}, version=${EXPECTED_VERSION}, health=${HEALTH_PATH})"
 run_check "Health endpoint returns OK (${HEALTH_PATH})" check_health
-run_check "Home page serves Hello World" check_page
+run_check "Home page serves Task Tracker" check_page
 run_check "Deployed version is ${EXPECTED_VERSION}" check_version
 run_check "Environment config is ${EXPECTED_ENV}" check_env
 

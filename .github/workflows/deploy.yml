@@ -64,7 +64,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          grep -q "Hello World" app/index.html
+          grep -q "Task Tracker" app/index.html
           grep -q "__VERSION__" app/index.html
           rm -rf build && mkdir build
           sed "s/__VERSION__/${GITHUB_SHA::7}/g" app/index.html > build/index.html
